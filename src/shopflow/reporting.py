@@ -12,11 +12,40 @@ from pathlib import Path
 from typing import Any
 
 from .knowledge import get_document, match_experts
-from .scenario import ROOT, build_snapshot
+from .scenario import ROOT, build_snapshot, load_frozen_snapshot
 
 
 OUTPUT_DIR = ROOT / "output" / "reports"
 RUNTIME_DIR = ROOT / ".presentation-runtime"
+REPOSITORY_RAW_BASE = (
+    "https://github.com/pipiwolve/dumate-ecommerce-case/raw/refs/heads/main/output/reports"
+)
+REPORT_FILENAMES = [
+    "ShopFlow-v2.6-技术负责人版.pptx",
+    "ShopFlow-v2.6-客户项目经理版.pptx",
+]
+
+
+def pre_generated_reports() -> dict[str, Any]:
+    """Return immutable demo artifacts without writing to the server filesystem."""
+
+    snapshot = load_frozen_snapshot()
+    audiences = ["tech_lead", "customer_project_manager"]
+    reports = [
+        {
+            "audience": audience,
+            "filename": filename,
+            "url": f"{REPOSITORY_RAW_BASE}/{filename}",
+        }
+        for audience, filename in zip(audiences, REPORT_FILENAMES, strict=True)
+    ]
+    return {
+        "snapshot_id": snapshot["snapshot_id"],
+        "snapshot_at": snapshot["project"]["snapshot_at"],
+        "reports": reports,
+        "status": "pre_generated",
+        "note": "Vercel 公网演示返回仓库内预生成制品，不在 Serverless 请求中生成文件。",
+    }
 
 
 def build_report_context() -> dict[str, Any]:
@@ -69,10 +98,7 @@ def generate_reports() -> dict[str, Any]:
     shutil.copyfile(ROOT / "presentation" / "report_builder.mjs", builder_path)
     subprocess.run([node, str(builder_path), str(context_path), str(OUTPUT_DIR)], check=True)
 
-    files = [
-        OUTPUT_DIR / "ShopFlow-v2.6-技术负责人版.pptx",
-        OUTPUT_DIR / "ShopFlow-v2.6-客户项目经理版.pptx",
-    ]
+    files = [OUTPUT_DIR / filename for filename in REPORT_FILENAMES]
     if not all(file.exists() and file.stat().st_size > 0 for file in files):
         raise RuntimeError("report generation did not produce both PPTX files")
     metadata = {
@@ -118,4 +144,3 @@ def simulate_push() -> dict[str, Any]:
     log_path = ROOT / "output" / "inbox" / "delivery-log.json"
     log_path.write_text(json.dumps(log, ensure_ascii=False, indent=2), encoding="utf-8")
     return {**log, "log_path": str(log_path)}
-

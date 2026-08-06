@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/mcp",
+      "dest": "/api/index.py"
+    }
+  ],
+  "env": {
+    "MCP_PRINCIPAL": "principal_delivery",
+    "MCP_READ_ONLY": "1"
+  }
+}

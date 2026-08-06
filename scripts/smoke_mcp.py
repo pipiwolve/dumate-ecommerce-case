@@ -24,6 +24,8 @@ async def main() -> None:
                 "modules": ["inventory-reservation"],
             },
         )
+        reports_result = await client.call_tool("delivery_generate_reports", {})
+        push_result = await client.call_tool("delivery_simulate_push", {})
         payload = snapshot_result.data
         print(
             json.dumps(
@@ -34,6 +36,9 @@ async def main() -> None:
                     "health": payload["metrics"]["health"],
                     "knowledge": knowledge_result.data[0]["document_id"],
                     "expert": expert_result.data[0]["expert_id"],
+                    "reports_status": reports_result.data["status"],
+                    "report_count": len(reports_result.data["reports"]),
+                    "push_status": push_result.data["status"],
                 },
                 ensure_ascii=False,
                 indent=2,
