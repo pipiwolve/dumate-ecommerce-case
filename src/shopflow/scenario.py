@@ -43,9 +43,27 @@ def _modules(files: list[str]) -> list[str]:
     return found or ["repository-infrastructure"]
 
 
+def _resolve_ref(ref: str) -> str:
+    """Resolve scenario refs in both developer and CI clone layouts."""
+
+    try:
+        _git("rev-parse", "--verify", ref)
+        return ref
+    except subprocess.CalledProcessError:
+        remote_ref = f"origin/{ref}"
+        _git("rev-parse", "--verify", remote_ref)
+        return remote_ref
+
+
 def _diff(base_ref: str, head_ref: str) -> dict[str, Any]:
     empty_tree = "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
-    diff_args = (empty_tree, head_ref) if base_ref == "EMPTY" else (f"{base_ref}...{head_ref}",)
+    resolved_head = _resolve_ref(head_ref)
+    resolved_base = empty_tree if base_ref == "EMPTY" else _resolve_ref(base_ref)
+    diff_args = (
+        (empty_tree, resolved_head)
+        if base_ref == "EMPTY"
+        else (f"{resolved_base}...{resolved_head}",)
+    )
     files = [line for line in _git("diff", "--name-only", *diff_args).splitlines() if line]
     insertions = 0
     deletions = 0
@@ -58,7 +76,7 @@ def _diff(base_ref: str, head_ref: str) -> dict[str, Any]:
     return {
         "base_ref": base_ref,
         "head_ref": head_ref,
-        "head_sha": _git("rev-parse", head_ref),
+        "head_sha": _git("rev-parse", resolved_head),
         "files": files,
         "modules": _modules(files),
         "insertions": insertions,
