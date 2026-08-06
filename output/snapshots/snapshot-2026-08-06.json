@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "project": {
     "name": "ShopFlow v2.6 限时促销稳定性",
-    "repository": "OWNER/ecommerce-delivery-case",
+    "repository": "pipiwolve/dumate-ecommerce-case",
     "snapshot_at": "2026-08-06T18:00:00+08:00",
     "milestone": {
       "title": "v2.6 限时促销稳定性",
@@ -353,7 +353,7 @@
   "sources": [
     {
       "type": "github",
-      "uri": "github://OWNER/ecommerce-delivery-case/milestone/v2.6"
+      "uri": "github://pipiwolve/dumate-ecommerce-case/milestone/v2.6"
     },
     {
       "type": "git",
@@ -364,5 +364,5 @@
       "uri": "scenario/github/seed.json"
     }
   ],
-  "snapshot_id": "shopflow-41d613d1137b"
+  "snapshot_id": "shopflow-0552eb94d0a4"
 }
