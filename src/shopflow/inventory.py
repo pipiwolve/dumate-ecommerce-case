@@ -87,15 +87,18 @@ class InventoryLedger:
             return reservation
 
     def release(self, order_id: str) -> Reservation:
-        """Release an active reservation."""
+        """Release an active reservation without changing physical stock.
+
+        BUG-103 was caused by subtracting stock during release. This idempotent
+        implementation is the merged fix represented in the scenario.
+        """
+
         with self._lock:
             reservation = self._require(order_id)
             if reservation.status == "released":
                 return reservation
             if reservation.status != "active":
                 raise ValueError(f"cannot release {reservation.status} reservation")
-            # BUG-103: releasing a hold must not consume physical stock.
-            self._stock[reservation.sku] -= reservation.quantity
             reservation.status = "released"
             return reservation
 
