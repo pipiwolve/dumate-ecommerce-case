@@ -48,3 +48,13 @@ PR、Commit、Diff、Review 和 Check Run 只作为完成与风险证据。代�
 Demo 允许自动生成并推送两份 PPT。正式上线时，客户版必须由内部项目经理审核；
 无人确认时只保留内部草稿，不自动外发。严重阻塞和主分支检查失败应即时提醒，
 完整 PPT 仍按固定周期生成。
+
+## 6. 真实 GitHub 后续状态
+
+风险快照冻结后，联网演练继续完成了恢复链路：BUG-102 的首次修复 PR #9 保留失败
+Check Run；GitHub Actions 机器人创建 PR #13，评审者提交 Changes Requested 和行级
+Review Thread，修复后检查通过、线程解决、Approve 并合并。PERF-104 由 PR #10 合并。
+
+PR #14 故意不关联 Issue，用于演示计划外缓存变更。RC 验证发现库存陈旧窗口后，
+CHORE-106 补登记并由 HOTFIX-107 / PR #17 精确 Revert。RC1 保留风险状态，RC2 指向
+Hotfix 后主分支。完整 URL、编号和证据 Tags 见 `docs/GITHUB_FLOW_EVIDENCE.md`。

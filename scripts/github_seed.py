@@ -44,7 +44,27 @@ def create_labels(repo: str, issues: list[dict[str, Any]], apply: bool) -> None:
         )
 
 
+def existing_issue_url(repo: str, issue: dict[str, Any], apply: bool) -> str | None:
+    if not apply:
+        return None
+    title = f"[{issue['key']}] {issue['title']}"
+    raw = command(
+        [
+            "gh", "issue", "list", "--repo", repo, "--state", "all",
+            "--search", f'"[{issue["key"]}]" in:title', "--limit", "100",
+            "--json", "title,url",
+        ],
+        True,
+        capture=True,
+    )
+    return next((item["url"] for item in json.loads(raw) if item["title"] == title), None)
+
+
 def create_issue(repo: str, milestone: str, issue: dict[str, Any], apply: bool) -> str:
+    existing = existing_issue_url(repo, issue, apply)
+    if existing:
+        print(f"EXISTS   {issue['key']} {existing}")
+        return existing
     body = (
         f"{issue['body']}\n\n"
         f"场景键：`{issue['key']}`\n"
@@ -73,11 +93,19 @@ def create_issue(repo: str, milestone: str, issue: dict[str, Any], apply: bool) 
     return url
 
 
-def publish(repo: str, apply: bool) -> None:
-    seed = json.loads(SEED.read_text(encoding="utf-8"))
-    milestone = seed["project"]["milestone"]
+def ensure_milestone(repo: str, milestone: dict[str, Any], apply: bool) -> None:
     if apply:
-        command(["gh", "auth", "status"], True)
+        existing = command(
+            [
+                "gh", "api", f"repos/{repo}/milestones?state=all&per_page=100",
+                "--jq", f'.[] | select(.title == "{milestone["title"]}") | .html_url',
+            ],
+            True,
+            capture=True,
+        )
+        if existing:
+            print(f"EXISTS   milestone {existing}")
+            return
     command(
         [
             "gh", "api", f"repos/{repo}/milestones", "--method", "POST",
@@ -87,6 +115,42 @@ def publish(repo: str, apply: bool) -> None:
         ],
         apply,
     )
+
+
+def ensure_pr(repo: str, issue_urls: dict[str, str], pr: dict[str, Any], apply: bool) -> None:
+    head_ref = pr.get("publish_head_ref", pr["head_ref"])
+    if apply:
+        raw = command(
+            [
+                "gh", "pr", "list", "--repo", repo, "--state", "all",
+                "--head", head_ref, "--limit", "100", "--json", "url",
+            ],
+            True,
+            capture=True,
+        )
+        existing = json.loads(raw)
+        if existing:
+            print(f"EXISTS   PR {existing[0]['url']}")
+            return
+    related = ", ".join(f"{key}: {issue_urls[key]}" for key in pr["issue_keys"])
+    github_base = "main" if pr["base_ref"].startswith("scenario/") else pr["base_ref"]
+    command(
+        [
+            "gh", "pr", "create", "--repo", repo,
+            "--base", github_base, "--head", head_ref,
+            "--title", pr["title"],
+            "--body", f"DuMate 场景 PR。关联事项：{related}",
+        ],
+        apply,
+    )
+
+
+def publish(repo: str, apply: bool) -> None:
+    seed = json.loads(SEED.read_text(encoding="utf-8"))
+    milestone = seed["project"]["milestone"]
+    if apply:
+        command(["gh", "auth", "status"], True)
+    ensure_milestone(repo, milestone, apply)
     create_labels(repo, seed["issues"], apply)
     issue_urls = {
         issue["key"]: create_issue(repo, milestone["title"], issue, apply)
@@ -98,17 +162,7 @@ def publish(repo: str, apply: bool) -> None:
     for pr in seed["pull_requests"]:
         if pr["state"] != "open":
             continue
-        related = ", ".join(f"{key}: {issue_urls[key]}" for key in pr["issue_keys"])
-        github_base = "main" if pr["base_ref"].startswith("scenario/") else pr["base_ref"]
-        command(
-            [
-                "gh", "pr", "create", "--repo", repo,
-                "--base", github_base, "--head", pr["head_ref"],
-                "--title", pr["title"],
-                "--body", f"DuMate 场景 PR。关联事项：{related}",
-            ],
-            apply,
-        )
+        ensure_pr(repo, issue_urls, pr, apply)
     print("APPLIED" if apply else "Dry-run complete. Re-run with --apply after reviewing every target.")
 
 
