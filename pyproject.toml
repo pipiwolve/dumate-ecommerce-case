@@ -1,0 +1,25 @@
+[project]
+name = "shopflow-delivery-case"
+version = "0.1.0"
+description = "Repeatable ecommerce delivery project for DuMate GitHub and knowledge MCP demos"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.115",
+  "fastmcp>=2.0",
+  "uvicorn[standard]>=0.34",
+]
+
+[project.optional-dependencies]
+dev = ["httpx>=0.28", "pytest>=8.3"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/shopflow"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
