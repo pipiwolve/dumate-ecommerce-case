@@ -66,13 +66,16 @@ class InventoryLedger:
         if self._before_reservation_write:
             self._before_reservation_write()
 
-        reservation = Reservation(
-            order_id=order_id,
-            sku=sku,
-            quantity=quantity,
-            expires_at=datetime.now(UTC) + ttl,
-        )
-        self._reservations[order_id] = reservation
+        # First remediation attempt: protects the write, but the availability
+        # read still happens outside the critical section.
+        with self._lock:
+            reservation = Reservation(
+                order_id=order_id,
+                sku=sku,
+                quantity=quantity,
+                expires_at=datetime.now(UTC) + ttl,
+            )
+            self._reservations[order_id] = reservation
         return reservation
 
     def confirm(self, order_id: str) -> Reservation:
