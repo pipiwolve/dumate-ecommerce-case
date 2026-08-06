@@ -1,0 +1,63 @@
+[
+  {
+    "document_id": "kb-inventory-concurrency-v1",
+    "title": "库存预占并发一致性规范",
+    "filename": "inventory-concurrency.md",
+    "document_type": "architecture-standard",
+    "version": "1.0",
+    "status": "published",
+    "classification": "internal",
+    "allowed_principals": ["principal_engineering", "principal_delivery"],
+    "tags": ["inventory", "concurrency", "atomicity", "oversell"],
+    "source_url": "kb://shopflow/architecture/inventory-concurrency-v1"
+  },
+  {
+    "document_id": "kb-incident-oversell-2025",
+    "title": "2025 双十一超卖事故复盘",
+    "filename": "incident-oversell.md",
+    "document_type": "incident-review",
+    "version": "1.2",
+    "status": "published",
+    "classification": "restricted",
+    "allowed_principals": ["principal_engineering"],
+    "tags": ["inventory", "oversell", "incident", "idempotency"],
+    "source_url": "kb://shopflow/incidents/oversell-2025"
+  },
+  {
+    "document_id": "kb-cart-performance-v1",
+    "title": "购物车与库存批量查询性能基线",
+    "filename": "cart-performance.md",
+    "document_type": "performance-standard",
+    "version": "1.0",
+    "status": "published",
+    "classification": "internal",
+    "allowed_principals": ["principal_engineering", "principal_delivery"],
+    "tags": ["cart", "inventory", "performance", "n+1", "batch"],
+    "source_url": "kb://shopflow/performance/cart-inventory-v1"
+  },
+  {
+    "document_id": "kb-admin-security-v2",
+    "title": "后台库存调整权限与审计控制",
+    "filename": "admin-security.md",
+    "document_type": "security-policy",
+    "version": "2.0",
+    "status": "published",
+    "classification": "internal",
+    "allowed_principals": ["principal_engineering", "principal_delivery"],
+    "tags": ["admin", "security", "rbac", "audit", "inventory"],
+    "source_url": "kb://shopflow/security/admin-stock-v2"
+  },
+  {
+    "document_id": "kb-release-gate-v1",
+    "title": "促销版本发布门禁 SOP",
+    "filename": "release-gate.md",
+    "document_type": "sop",
+    "version": "1.0",
+    "status": "published",
+    "classification": "public",
+    "allowed_principals": ["principal_engineering", "principal_delivery", "principal_customer_pm"],
+    "tags": ["release", "quality-gate", "customer", "blocker"],
+    "source_url": "kb://shopflow/sop/promotion-release-gate-v1"
+  }
+]
+

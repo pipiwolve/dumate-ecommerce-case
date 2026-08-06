@@ -1,8 +1,12 @@
 .venv/
 __pycache__/
 .pytest_cache/
+.codegraph/
 .presentation-runtime/
 build/
 dist/
 *.pyc
-
+output/reports/*.inspect.ndjson
+output/reports/*-montage.png
+output/reports/ShopFlow-v2.6-技术负责人版/
+output/reports/ShopFlow-v2.6-客户项目经理版/

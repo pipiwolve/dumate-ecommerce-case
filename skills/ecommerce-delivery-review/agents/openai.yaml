@@ -1,0 +1,21 @@
+interface:
+  display_name: "电商交付风险审查"
+  short_description: "汇总 GitHub 进展、代码风险、知识与专家建议"
+  default_prompt: "使用 $ecommerce-delivery-review 生成本期电商版本的双角色交付报告。"
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "github"
+      description: "DuMate 官方 GitHub MCP，用于读取仓库、Issue、PR、Review 与检查结果"
+      transport: "streamable_http"
+      url: "https://api.githubcopilot.com/mcp/"
+    - type: "mcp"
+      value: "shopflow-delivery-knowledge"
+      description: "本地知识、专家、快照与双角色报告 MCP"
+      transport: "streamable_http"
+      url: "http://127.0.0.1:8130/mcp"
+
+policy:
+  allow_implicit_invocation: true
+

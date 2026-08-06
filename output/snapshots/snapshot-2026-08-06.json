@@ -1,0 +1,368 @@
+{
+  "schema_version": "1.0",
+  "project": {
+    "name": "ShopFlow v2.6 限时促销稳定性",
+    "repository": "pipiwolve/dumate-ecommerce-case",
+    "snapshot_at": "2026-08-06T18:00:00+08:00",
+    "milestone": {
+      "title": "v2.6 限时促销稳定性",
+      "due_on": "2026-08-12",
+      "customer_release_on": "2026-08-15",
+      "owner": "周敏 / 客户项目经理"
+    }
+  },
+  "metrics": {
+    "weighted_progress": 65,
+    "health": "at_risk",
+    "open_issues": 4,
+    "closed_issues": 2,
+    "release_blockers": [
+      "BUG-102"
+    ],
+    "open_pull_requests": 2,
+    "failed_checks": 1,
+    "unlinked_changes": 1
+  },
+  "issues": [
+    {
+      "number": 1,
+      "key": "EPIC-1",
+      "title": "限时促销库存稳定性版本",
+      "type": "epic",
+      "state": "open",
+      "status": "有风险",
+      "priority": "P0",
+      "assignee": "赵磊",
+      "weight": 0,
+      "progress": 65,
+      "labels": [
+        "epic",
+        "release/v2.6"
+      ],
+      "body": "新增库存预占与超时释放能力，完成高并发稳定性、性能和权限验收。",
+      "comments": [
+        {
+          "at": "2026-08-03T09:30:00+08:00",
+          "author": "周敏",
+          "body": "客户促销上线日期为 8 月 15 日，核心链路不得出现超卖。"
+        },
+        {
+          "at": "2026-08-06T17:20:00+08:00",
+          "author": "赵磊",
+          "body": "BUG-102 仍阻塞发布，已请求库存一致性专家介入。"
+        }
+      ]
+    },
+    {
+      "number": 101,
+      "key": "FEAT-101",
+      "title": "新增库存预占与超时释放模块",
+      "type": "feature",
+      "state": "closed",
+      "status": "已完成",
+      "priority": "P0",
+      "assignee": "陈晨",
+      "weight": 25,
+      "progress": 100,
+      "labels": [
+        "feature",
+        "inventory"
+      ],
+      "body": "下单时预占库存，15 分钟未支付则释放；支付成功后确认扣减。",
+      "comments": [
+        {
+          "at": "2026-08-04T16:40:00+08:00",
+          "author": "陈晨",
+          "body": "基础流程和单元测试已合并至 main。"
+        }
+      ]
+    },
+    {
+      "number": 102,
+      "key": "BUG-102",
+      "title": "高并发库存预占出现超卖",
+      "type": "bug",
+      "state": "open",
+      "status": "阻塞",
+      "priority": "P0",
+      "assignee": "陈晨",
+      "weight": 25,
+      "progress": 45,
+      "labels": [
+        "bug",
+        "inventory",
+        "concurrency",
+        "release-blocker"
+      ],
+      "body": "并发压测中同一 SKU 库存为 1 时两个订单均预占成功，可用库存降至 -1。",
+      "comments": [
+        {
+          "at": "2026-08-06T11:20:00+08:00",
+          "author": "QA 林悦",
+          "body": "200 并发下复现 17 次，最小复现用 Barrier 固定读写窗口。"
+        },
+        {
+          "at": "2026-08-06T15:10:00+08:00",
+          "author": "reviewer-王海",
+          "body": "只锁写入不能保护 check-then-act，要求将校验和写入放入同一原子边界。"
+        }
+      ]
+    },
+    {
+      "number": 103,
+      "key": "BUG-103",
+      "title": "取消订单后库存未完全释放",
+      "type": "bug",
+      "state": "closed",
+      "status": "已完成",
+      "priority": "P1",
+      "assignee": "孙璐",
+      "weight": 15,
+      "progress": 100,
+      "labels": [
+        "bug",
+        "inventory",
+        "regression"
+      ],
+      "body": "取消未支付订单时错误扣减物理库存，重复取消还会再次修改库存。",
+      "comments": [
+        {
+          "at": "2026-08-05T18:05:00+08:00",
+          "author": "孙璐",
+          "body": "修复已合并，release 现在幂等且不修改物理库存。"
+        }
+      ]
+    },
+    {
+      "number": 104,
+      "key": "PERF-104",
+      "title": "购物车批量库存校验存在 N+1 查询",
+      "type": "performance",
+      "state": "open",
+      "status": "审查中",
+      "priority": "P1",
+      "assignee": "郭琪",
+      "weight": 15,
+      "progress": 90,
+      "labels": [
+        "performance",
+        "cart",
+        "inventory"
+      ],
+      "body": "购物车每个 SKU 单独查询库存，50 件商品时 P95 达 680ms。",
+      "comments": [
+        {
+          "at": "2026-08-06T16:00:00+08:00",
+          "author": "郭琪",
+          "body": "批量接口 PR 已通过测试，等待 inventory owner review。"
+        }
+      ]
+    },
+    {
+      "number": 105,
+      "key": "SEC-105",
+      "title": "后台人工调整库存缺少权限与审计校验",
+      "type": "security",
+      "state": "open",
+      "status": "待开始",
+      "priority": "P1",
+      "assignee": "未分配",
+      "weight": 20,
+      "progress": 0,
+      "labels": [
+        "security",
+        "admin",
+        "audit"
+      ],
+      "body": "管理端库存调整方法没有角色权限、原因字段和审计事件。",
+      "comments": []
+    }
+  ],
+  "pull_requests": [
+    {
+      "number": 201,
+      "title": "feat: add inventory reservation module for v2.6",
+      "issue_keys": [
+        "FEAT-101"
+      ],
+      "state": "merged",
+      "head_ref": "scenario/feat-101",
+      "base_ref": "EMPTY",
+      "review_decision": "approved",
+      "checks": [
+        {
+          "name": "unit-tests",
+          "conclusion": "success"
+        }
+      ],
+      "diff": {
+        "base_ref": "EMPTY",
+        "head_ref": "scenario/feat-101",
+        "head_sha": "8225815db968ba244fc95bf6cc7fa5cb8cc266d6",
+        "files": [
+          ".gitignore",
+          "README.md",
+          "pyproject.toml",
+          "src/shopflow/__init__.py",
+          "src/shopflow/admin.py",
+          "src/shopflow/api.py",
+          "src/shopflow/cart.py",
+          "src/shopflow/catalog.py",
+          "src/shopflow/inventory.py",
+          "src/shopflow/orders.py",
+          "uv.lock"
+        ],
+        "modules": [
+          "admin-console",
+          "cart-service",
+          "inventory-reservation",
+          "order-service"
+        ],
+        "insertions": 2061,
+        "deletions": 0,
+        "source_url": "git://shopflow/EMPTY...scenario/feat-101"
+      }
+    },
+    {
+      "number": 202,
+      "title": "fix: serialize reservation writes for BUG-102",
+      "issue_keys": [
+        "BUG-102"
+      ],
+      "state": "open",
+      "head_ref": "fix/bug-102-oversell",
+      "base_ref": "scenario/product-main",
+      "review_decision": "changes_requested",
+      "checks": [
+        {
+          "name": "bug-102-regression",
+          "conclusion": "failure",
+          "summary": "expected available=0, actual=-1"
+        }
+      ],
+      "diff": {
+        "base_ref": "scenario/product-main",
+        "head_ref": "fix/bug-102-oversell",
+        "head_sha": "80fcfb30352ed7c6f5c95bc653965363609364b3",
+        "files": [
+          "src/shopflow/inventory.py",
+          "tests/test_bug_102_regression.py"
+        ],
+        "modules": [
+          "inventory-reservation",
+          "quality-gates"
+        ],
+        "insertions": 34,
+        "deletions": 7,
+        "source_url": "git://shopflow/scenario/product-main...fix/bug-102-oversell"
+      }
+    },
+    {
+      "number": 203,
+      "title": "fix: release cancelled order inventory correctly",
+      "issue_keys": [
+        "BUG-103"
+      ],
+      "state": "merged",
+      "head_ref": "scenario/bug-103",
+      "base_ref": "scenario/feat-101",
+      "review_decision": "approved",
+      "checks": [
+        {
+          "name": "unit-tests",
+          "conclusion": "success"
+        }
+      ],
+      "diff": {
+        "base_ref": "scenario/feat-101",
+        "head_ref": "scenario/bug-103",
+        "head_sha": "8b67e3d750386b4c993fed848298fa54ff6e2bea",
+        "files": [
+          "src/shopflow/inventory.py",
+          "tests/test_inventory.py",
+          "tests/test_orders.py"
+        ],
+        "modules": [
+          "inventory-reservation",
+          "quality-gates"
+        ],
+        "insertions": 82,
+        "deletions": 3,
+        "source_url": "git://shopflow/scenario/feat-101...scenario/bug-103"
+      }
+    },
+    {
+      "number": 204,
+      "title": "perf: batch cart inventory availability checks",
+      "issue_keys": [
+        "PERF-104"
+      ],
+      "state": "open",
+      "head_ref": "perf/perf-104-batch-stock",
+      "base_ref": "scenario/product-main",
+      "review_decision": "review_required",
+      "checks": [
+        {
+          "name": "unit-tests",
+          "conclusion": "success"
+        }
+      ],
+      "diff": {
+        "base_ref": "scenario/product-main",
+        "head_ref": "perf/perf-104-batch-stock",
+        "head_sha": "577b8c36b8da745891d486fb5b7b18667b953544",
+        "files": [
+          "src/shopflow/cart.py",
+          "src/shopflow/inventory.py",
+          "tests/test_cart.py"
+        ],
+        "modules": [
+          "cart-service",
+          "inventory-reservation",
+          "quality-gates"
+        ],
+        "insertions": 27,
+        "deletions": 2,
+        "source_url": "git://shopflow/scenario/product-main...perf/perf-104-batch-stock"
+      }
+    }
+  ],
+  "findings": [
+    {
+      "key": "CHORE-106",
+      "title": "缓存配置变更未关联 Issue",
+      "severity": "medium",
+      "head_ref": "chore/cache-tuning",
+      "reason": "分支与 Commit message 均没有 Issue 编号，且改变库存可见性缓存策略。",
+      "diff": {
+        "base_ref": "scenario/product-main",
+        "head_ref": "chore/cache-tuning",
+        "head_sha": "41b919cda050be279661ce452a8adaa2300bd0ad",
+        "files": [
+          "config/cache.json"
+        ],
+        "modules": [
+          "runtime-config"
+        ],
+        "insertions": 5,
+        "deletions": 0,
+        "source_url": "git://shopflow/scenario/product-main...chore/cache-tuning"
+      }
+    }
+  ],
+  "sources": [
+    {
+      "type": "github",
+      "uri": "github://pipiwolve/dumate-ecommerce-case/milestone/v2.6"
+    },
+    {
+      "type": "git",
+      "uri": "git://shopflow/product-main@8b67e3d750386b4c993fed848298fa54ff6e2bea"
+    },
+    {
+      "type": "scenario",
+      "uri": "scenario/github/seed.json"
+    }
+  ],
+  "snapshot_id": "shopflow-0552eb94d0a4"
+}

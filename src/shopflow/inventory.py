@@ -22,12 +22,7 @@ class Reservation:
 
 
 class InventoryLedger:
-    """In-memory stock ledger.
-
-    The initial availability check and reservation write are intentionally not
-    atomic. BUG-102 tracks this known race and the demo PR contains a failed
-    first remediation attempt.
-    """
+    """Thread-safe in-memory stock ledger used by the delivery case."""
 
     def __init__(
         self,
@@ -40,12 +35,26 @@ class InventoryLedger:
         self._before_reservation_write = before_reservation_write
 
     def available(self, sku: str) -> int:
-        reserved = sum(
-            item.quantity
-            for item in self._reservations.values()
-            if item.sku == sku and item.status == "active"
-        )
-        return self._stock.get(sku, 0) - reserved
+        with self._lock:
+            reserved = sum(
+                item.quantity
+                for item in self._reservations.values()
+                if item.sku == sku and item.status == "active"
+            )
+            return self._stock.get(sku, 0) - reserved
+
+    def available_many(self, skus: list[str]) -> dict[str, int]:
+        """Return one availability snapshot for all requested SKUs."""
+
+        unique_skus = list(dict.fromkeys(skus))
+        reserved_by_sku = {sku: 0 for sku in unique_skus}
+        for item in self._reservations.values():
+            if item.status == "active" and item.sku in reserved_by_sku:
+                reserved_by_sku[item.sku] += item.quantity
+        return {
+            sku: self._stock.get(sku, 0) - reserved_by_sku[sku]
+            for sku in unique_skus
+        }
 
     def reserve(
         self,
@@ -56,24 +65,24 @@ class InventoryLedger:
     ) -> Reservation:
         if quantity <= 0:
             raise ValueError("quantity must be positive")
-        if order_id in self._reservations:
-            return self._reservations[order_id]
-
-        # BUG-102: another request can reserve the same stock after this read.
-        remaining = self.available(sku)
-        if remaining < quantity:
-            raise InsufficientStock(f"{sku} has {remaining}, requested {quantity}")
         if self._before_reservation_write:
             self._before_reservation_write()
 
-        reservation = Reservation(
-            order_id=order_id,
-            sku=sku,
-            quantity=quantity,
-            expires_at=datetime.now(UTC) + ttl,
-        )
-        self._reservations[order_id] = reservation
-        return reservation
+        with self._lock:
+            if order_id in self._reservations:
+                return self._reservations[order_id]
+
+            remaining = self.available(sku)
+            if remaining < quantity:
+                raise InsufficientStock(f"{sku} has {remaining}, requested {quantity}")
+            reservation = Reservation(
+                order_id=order_id,
+                sku=sku,
+                quantity=quantity,
+                expires_at=datetime.now(UTC) + ttl,
+            )
+            self._reservations[order_id] = reservation
+            return reservation
 
     def confirm(self, order_id: str) -> Reservation:
         with self._lock:

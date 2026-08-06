@@ -1,0 +1,26 @@
+name: 功能需求
+description: 定义可验收的电商能力或模块变更
+title: "[FEAT] "
+labels: ["feature"]
+body:
+  - type: textarea
+    id: outcome
+    attributes:
+      label: 业务目标
+      description: 描述用户或交付结果，不使用提交数量作为进度。
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: 验收标准
+    validations:
+      required: true
+  - type: input
+    id: modules
+    attributes:
+      label: 预计影响模块
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: 依赖与风险
