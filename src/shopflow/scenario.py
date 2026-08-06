@@ -108,7 +108,7 @@ def build_snapshot(write: bool = True) -> dict[str, Any]:
         "pull_requests": pull_requests,
         "findings": findings,
         "sources": [
-            {"type": "github", "uri": "github://OWNER/ecommerce-delivery-case/milestone/v2.6"},
+            {"type": "github", "uri": "github://pipiwolve/dumate-ecommerce-case/milestone/v2.6"},
             {"type": "git", "uri": f"git://shopflow/product-main@{_git('rev-parse', 'scenario/product-main')}"},
             {"type": "scenario", "uri": str(SEED_PATH.relative_to(ROOT))},
         ],

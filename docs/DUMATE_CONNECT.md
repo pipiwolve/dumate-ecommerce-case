@@ -27,9 +27,9 @@ DuMate 导入：
 
 ## GitHub 官方 MCP
 
-本地 JSON 仅用于离线验收和发布种子。将仓库发布至 GitHub 后，把
-`scenario/github/seed.json` 中的 `OWNER/ecommerce-delivery-case` 替换为实际仓库，
-再通过 DuMate 官方 GitHub MCP 读取 Milestone、Issue、PR 和 Commit。
+本地 JSON 仅用于离线验收和发布种子。真实演示仓库为
+`pipiwolve/dumate-ecommerce-case`，DuMate 官方 GitHub MCP 读取该仓库的
+Milestone、Issue、PR、Review、Check Run、Commit 和 Release。
 
 线上写入脚本默认 dry-run，只有同时提供 `--repo` 和 `--apply` 才会调用 `gh`。
 运行前先确认目标账号、仓库可见性和 GitHub 登录状态。
@@ -37,7 +37,7 @@ DuMate 导入：
 Dry-run 示例：
 
 ```bash
-uv run python scripts/github_seed.py --repo OWNER/ecommerce-delivery-case
+uv run python scripts/github_seed.py --repo pipiwolve/dumate-ecommerce-case
 ```
 
 确认输出后才使用 `--apply`。脚本会创建一期 Milestone 与 Issue，并为 BUG-102 和

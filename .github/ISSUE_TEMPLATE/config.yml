@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 严重生产事故
+    url: https://github.com/pipiwolve/dumate-ecommerce-case/issues/new?template=bug.yml
+    about: 先按事故升级流程通知值班负责人，再补充可审计 Issue。

@@ -1,0 +1,42 @@
+name: 缺陷报告
+description: 记录可复现的产品或工程缺陷
+title: "[BUG] "
+labels: ["bug"]
+body:
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 优先级
+      options: [P0, P1, P2]
+    validations:
+      required: true
+  - type: input
+    id: module
+    attributes:
+      label: 影响模块
+      placeholder: inventory-reservation
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 复现步骤与实际结果
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期望结果
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 日志、截图或测试证据
+  - type: checkboxes
+    id: confirmation
+    attributes:
+      label: 提交确认
+      options:
+        - label: 已排除敏感信息，并确认该问题可重复验证
+          required: true

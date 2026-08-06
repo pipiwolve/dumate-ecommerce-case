@@ -1,0 +1,42 @@
+name: Create scenario PR
+
+on:
+  workflow_dispatch:
+    inputs:
+      head:
+        description: Existing scenario branch
+        required: true
+      base:
+        description: Target branch
+        required: true
+        default: main
+      title:
+        description: Pull request title
+        required: true
+      body:
+        description: Pull request body, including Fixes issue link
+        required: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  create:
+    name: Create bot-authored pull request
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create pull request from the existing branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_HEAD: ${{ inputs.head }}
+          PR_BASE: ${{ inputs.base }}
+          PR_TITLE: ${{ inputs.title }}
+          PR_BODY: ${{ inputs.body }}
+        run: |
+          gh pr create \
+            --repo "$GITHUB_REPOSITORY" \
+            --head "$PR_HEAD" \
+            --base "$PR_BASE" \
+            --title "$PR_TITLE" \
+            --body "$PR_BODY"

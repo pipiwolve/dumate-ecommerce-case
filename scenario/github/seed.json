@@ -1,7 +1,7 @@
 {
   "project": {
     "name": "ShopFlow v2.6 限时促销稳定性",
-    "repository": "OWNER/ecommerce-delivery-case",
+    "repository": "pipiwolve/dumate-ecommerce-case",
     "snapshot_at": "2026-08-06T18:00:00+08:00",
     "milestone": {
       "title": "v2.6 限时促销稳定性",
