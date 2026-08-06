@@ -1,30 +1,40 @@
 # Tool and Output Contract
 
-## Required snapshot fields
+## Required report context fields
 
-- `snapshot_id`, `schema_version`, and `project.snapshot_at`
-- repository and Milestone identity
-- weighted progress and health
-- Issues with status, weight, progress, owner, labels, and source
+- `report_context_id`, repository, Milestone, timezone, window start, window end
+- Issues with status, owner, labels, source URL, and completion evidence
 - PRs with base/head refs, SHA, Reviews, Check Runs, changed files, and affected modules
 - unlinked changes and evidence gaps
-- knowledge results with stable `source_url` and `content_hash`
+- knowledge results with document ID, version, stable `source_url`, and `content_hash`
 - expert results with `expert_id`, match reason, availability, and escalation condition
+- facts, inferences, and pending confirmations stored separately
 
-## Demo tool order
+## MCP responsibility
 
-1. `delivery_build_snapshot`
-2. `knowledge_search(query="inventory concurrency oversell")`
-3. `knowledge_get_document(document_id="kb-inventory-concurrency-v1")`
-4. `expert_match(risk_tags=["inventory", "concurrency", "oversell"], modules=["inventory-reservation"] )`
-5. `delivery_generate_reports`
-6. `delivery_simulate_push`
+GitHub official MCP supplies all repository and delivery facts. ShopFlow MCP exposes only:
+
+1. `knowledge_search`
+2. `knowledge_get_document`
+3. `expert_match`
+
+DuMate owns scheduling, context assembly, PPT generation, consistency checks, approval, and push.
+
+## Enrichment order
+
+For each material risk:
+
+1. Derive risk tags and affected modules from GitHub evidence.
+2. Call `knowledge_search` with the risk terms.
+3. Call `knowledge_get_document` for the best authorized result.
+4. Call `expert_match` with the same risk tags and affected modules.
+5. Retain source, version, hash, match reason, availability, and escalation condition.
 
 ## Report invariants
 
-- Both reports must show the same snapshot ID and snapshot time.
-- The technical report may cite restricted engineering knowledge.
-- The customer report may cite only customer-visible policy and Milestone evidence.
-- Every risk must include owner, next action, and evidence source.
+- Both reports must show the same `report_context_id`, repository, Milestone, and time window.
+- The technical report includes code-level evidence, CI, Reviews, knowledge, and expert routing.
+- The customer report includes progress, business impact, recovery action, owner, and decisions.
+- Every risk includes owner, next action, and evidence source.
 - Mark inferred schedule impact as `待项目经理确认`.
-
+- Production customer delivery requires human approval.

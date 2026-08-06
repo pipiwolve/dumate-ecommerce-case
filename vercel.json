@@ -13,7 +13,6 @@
     }
   ],
   "env": {
-    "MCP_PRINCIPAL": "principal_delivery",
-    "MCP_READ_ONLY": "1"
+    "MCP_PRINCIPAL": "principal_delivery"
   }
 }

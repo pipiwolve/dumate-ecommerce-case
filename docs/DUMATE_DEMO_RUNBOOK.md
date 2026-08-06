@@ -27,7 +27,7 @@ pipiwolve/dumate-ecommerce-case
 ```json
 {
   "mcpServers": {
-    "shopflow-delivery-knowledge": {
+    "shopflow-knowledge-experts": {
       "url": "https://www.demofun.online/mcp",
       "type": "streamableHttp",
       "headers": {}
@@ -36,7 +36,7 @@ pipiwolve/dumate-ecommerce-case
 }
 ```
 
-连接成功后应发现 7 个工具。主演示只需要：
+连接成功后只应发现 3 个工具：
 
 ```text
 knowledge_search
@@ -44,20 +44,13 @@ knowledge_get_document
 expert_match
 ```
 
-`delivery_build_snapshot` 和 `delivery_get_issue` 是固定历史案例；
-`delivery_generate_reports` 和 `delivery_simulate_push` 是预生成制品及推送预览。它们
-不参与“GitHub 实时数据 + DuMate 原生 PPT”的主路径。
+如果工具列表中仍出现 `delivery_*`，说明 Connector 仍在使用旧的工具缓存，应刷新或
+重新连接 MCP。
 
 ### 2.3 确认时间口径
 
-现场演示前明确选择一种口径：
-
-- 实时周报：以演示当天所在周为时间窗，结论以 GitHub 当前状态为准。
-- 固定案例：以 `2026-08-06 18:00 Asia/Shanghai` 为历史风险快照，结果固定为 65%
-  加权进度、`BUG-102` 阻塞。
-
-不要把实时 GitHub 状态与固定快照指标拼成一份报告。推荐主演示使用实时周报，固定
-案例只用于对照和故障兜底。
+现场演示以演示当天所在周为时间窗，结论只以 GitHub 官方 MCP 返回的当前状态为准。
+建议明确写出起止时间和 `Asia/Shanghai` 时区，避免“本周”在不同系统中产生歧义。
 
 ## 3. 主演示流程：实时 GitHub + DuMate 原生 PPT
 
@@ -161,7 +154,7 @@ BUG-102 应高置信匹配库存一致性专家；性能、安全和发布问题
 ### 步骤 9：执行一致性检查
 
 ```text
-比较两份 PPT：快照时间、完成事项、风险数量、发布结论和下一步必须一致。技术版可以
+比较两份 PPT：统计窗口、完成事项、风险数量、发布结论和下一步必须一致。技术版可以
 包含更多证据，但不能出现与客户版相反的状态。列出检查结果后再交付文件。
 ```
 
@@ -190,29 +183,40 @@ Review、Check Run 和 Release。以 Issue 为计划基线，不用 Commit 或�
 expert_match。严格区分事实、推断和待确认项。先形成一个带 report_context_id 的统一上下文，
 再使用 DuMate 自身的 PPT 生成能力输出两份文件：技术负责人版保留代码活动、模块、Diff、
 CI、Review、知识和专家证据；客户项目经理版只保留进度、业务影响、风险、恢复动作、责任人
-和待决策项。两份文件必须使用相同时间窗和上下文。不要调用 delivery_generate_reports，
-除非 DuMate 原生 PPT 生成失败并需要返回预生成案例制品作为兜底。
+和待决策项。两份文件必须使用相同时间窗和上下文。PPT、审批和推送都由 DuMate 完成。
 ```
 
-## 5. 固定案例兜底流程
+## 5. 每周五定时任务
 
-如果现场 GitHub 授权或网络失败：
+建议在 DuMate 创建每周五 `17:00 Asia/Shanghai` 运行的任务，时间可以按项目例会调整。
+统计窗口固定为本周一 `00:00` 到任务实际开始时间。
 
-1. 调用 `delivery_build_snapshot` 获得固定快照。
-2. 调用 `delivery_get_issue("BUG-102")` 讲解阻塞详情。
-3. 调用 `knowledge_search`、`knowledge_get_document` 和 `expert_match` 展示增强能力。
-4. 优先让 DuMate 根据快照生成两份 PPT。
-5. 若 PPT 能力也不可用，再调用 `delivery_generate_reports` 返回预生成文件链接。
+任务动作：
 
-固定快照的意义是保证演示可重复，不代表 GitHub 仓库当前状态。
+1. 通过 GitHub 官方 MCP 获取时间窗内更新的 Issue、PR、Commit、Diff、Review、Checks
+   和 Release，并读取相关 Milestone 当前状态。
+2. 形成事实证据表，识别完成事项、阻塞、计划外变化和证据缺口。
+3. 对高风险项调用知识库和专家工具。
+4. 生成唯一 `report_context_id`，由同一上下文生成两份 PPT。
+5. Demo 直接推送两份文件；正式上线时技术版可自动推送，客户项目经理版进入人工审核。
+6. 记录任务运行时间、GitHub 查询窗口、报告 ID、推送状态和失败原因。
+
+任务必须使用幂等键，例如：
+
+```text
+pipiwolve/dumate-ecommerce-case + 2026-W32 + weekly-delivery
+```
+
+同一周重跑应更新同一任务记录，不能重复推送。GitHub、知识库或 PPT 任一步失败时，不应
+发送内容不完整的客户报告；保留内部失败通知并允许人工重试。
 
 ## 6. 验收清单
 
-- GitHub 官方 MCP 能读取目标仓库，不使用冻结快照冒充实时数据。
-- ShopFlow MCP 能发现 7 个工具，主路径成功调用知识检索、正文读取和专家匹配。
+- GitHub 官方 MCP 能读取目标仓库并返回指定时间窗的实时数据。
+- ShopFlow MCP 只发现 3 个工具，并成功调用知识检索、正文读取和专家匹配。
 - 本周代码活动都能关联 Issue；未关联变化被单独标记。
 - 结论区分事实、推断和待确认项。
 - 两份 PPT 共用一个 `report_context_id` 和统计时间窗。
 - 技术版包含代码级证据，客户版完成脱敏且保留业务影响。
-- PPT 由 DuMate 原生能力生成；预生成 PPT 只作为对照或兜底。
+- PPT、定时任务、审批和推送均由 DuMate 执行。
 - 正式外发路径包含人工审核，不由 Demo 推送预览代替。

@@ -1,4 +1,4 @@
-"""Knowledge, expert, snapshot, and reporting MCP for the ShopFlow case."""
+"""Knowledge and expert MCP for the ShopFlow delivery case."""
 
 from __future__ import annotations
 
@@ -8,36 +8,11 @@ from typing import Any, Awaitable, Callable
 from fastmcp import FastMCP
 
 from .knowledge import get_document, match_experts, search_knowledge
-from .reporting import generate_reports, pre_generated_reports, simulate_push
-from .scenario import build_snapshot, get_issue, load_frozen_snapshot
 
 
 PRINCIPAL = os.getenv("MCP_PRINCIPAL", "principal_delivery")
-SERVERLESS = os.getenv("VERCEL") == "1" or os.getenv("MCP_READ_ONLY") == "1"
 EXPECTED_TOKEN = os.getenv("MCP_AUTH_TOKEN")
-mcp = FastMCP("shopflow-delivery-knowledge")
-
-
-@mcp.tool()
-def delivery_build_snapshot() -> dict[str, Any]:
-    """Return the frozen demo snapshot; local mode can rebuild it from fixture Git refs."""
-
-    if SERVERLESS:
-        return load_frozen_snapshot()
-    return build_snapshot(write=True)
-
-
-@mcp.tool()
-def delivery_get_issue(issue_key: str) -> dict[str, Any]:
-    """Read one issue from the frozen demo fixture, not from live GitHub."""
-
-    if SERVERLESS:
-        snapshot = load_frozen_snapshot()
-        try:
-            return next(issue for issue in snapshot["issues"] if issue["key"] == issue_key)
-        except StopIteration as exc:
-            raise LookupError(f"issue {issue_key} not found") from exc
-    return get_issue(issue_key)
+mcp = FastMCP("shopflow-knowledge-experts")
 
 
 @mcp.tool()
@@ -59,33 +34,6 @@ def expert_match(risk_tags: list[str], modules: list[str] | None = None) -> list
     """Rank human experts by risk domain and affected module."""
 
     return match_experts(risk_tags, modules)
-
-
-@mcp.tool()
-def delivery_generate_reports() -> dict[str, Any]:
-    """Get dual-audience demo PPT artifacts; only local mode regenerates the files."""
-
-    if SERVERLESS:
-        return pre_generated_reports()
-    return generate_reports()
-
-
-@mcp.tool()
-def delivery_simulate_push() -> dict[str, Any]:
-    """Preview demo report delivery; public mode does not send or write files."""
-
-    if SERVERLESS:
-        reports = pre_generated_reports()
-        return {
-            "task": "shopflow-weekly-delivery-update",
-            "mode": "public_demo_preview",
-            "snapshot_id": reports["snapshot_id"],
-            "deliveries": reports["reports"],
-            "status": "simulated",
-            "note": "公网演示不发送外部消息；实际业务上线后应接人工审核和受控推送通道。",
-        }
-    return simulate_push()
-
 
 
 mcp_app = mcp.http_app(

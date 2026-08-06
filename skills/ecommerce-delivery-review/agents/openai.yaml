@@ -11,11 +11,10 @@ dependencies:
       transport: "streamable_http"
       url: "https://api.githubcopilot.com/mcp/"
     - type: "mcp"
-      value: "shopflow-delivery-knowledge"
-      description: "本地知识、专家、快照与双角色报告 MCP"
+      value: "shopflow-knowledge-experts"
+      description: "ShopFlow 固定领域知识库与企业专家匹配 MCP"
       transport: "streamable_http"
-      url: "http://127.0.0.1:8130/mcp"
+      url: "https://www.demofun.online/mcp"
 
 policy:
   allow_implicit_invocation: true
-

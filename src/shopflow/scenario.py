@@ -12,7 +12,6 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[2]
 SEED_PATH = ROOT / "scenario" / "github" / "seed.json"
 SNAPSHOT_DIR = ROOT / "output" / "snapshots"
-FROZEN_SNAPSHOT_PATH = SNAPSHOT_DIR / "snapshot-2026-08-06.json"
 
 
 def _git(*args: str) -> str:
@@ -90,13 +89,7 @@ def load_seed() -> dict[str, Any]:
     return json.loads(SEED_PATH.read_text(encoding="utf-8"))
 
 
-def load_frozen_snapshot() -> dict[str, Any]:
-    """Load the committed evidence snapshot for runtimes without Git metadata."""
-
-    return json.loads(FROZEN_SNAPSHOT_PATH.read_text(encoding="utf-8"))
-
-
-def build_snapshot(write: bool = True) -> dict[str, Any]:
+def build_snapshot(write: bool = False) -> dict[str, Any]:
     seed = load_seed()
     pull_requests = []
     for item in seed["pull_requests"]:
