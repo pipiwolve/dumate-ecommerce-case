@@ -11,6 +11,7 @@ def validate_cart(items: list[dict[str, object]], inventory: InventoryLedger) ->
     proposes a batch query; this baseline behavior is kept for a real PR diff.
     """
 
+    availability = inventory.available_many([str(item["sku"]) for item in items])
     result = []
     for item in items:
         sku = str(item["sku"])
@@ -20,8 +21,7 @@ def validate_cart(items: list[dict[str, object]], inventory: InventoryLedger) ->
             {
                 **product,
                 "quantity": quantity,
-                "available": inventory.available(sku) >= quantity,
+                "available": availability[sku] >= quantity,
             }
         )
     return result
-
