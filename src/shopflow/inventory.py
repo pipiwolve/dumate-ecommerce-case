@@ -47,6 +47,19 @@ class InventoryLedger:
         )
         return self._stock.get(sku, 0) - reserved
 
+    def available_many(self, skus: list[str]) -> dict[str, int]:
+        """Return one availability snapshot for all requested SKUs."""
+
+        unique_skus = list(dict.fromkeys(skus))
+        reserved_by_sku = {sku: 0 for sku in unique_skus}
+        for item in self._reservations.values():
+            if item.status == "active" and item.sku in reserved_by_sku:
+                reserved_by_sku[item.sku] += item.quantity
+        return {
+            sku: self._stock.get(sku, 0) - reserved_by_sku[sku]
+            for sku in unique_skus
+        }
+
     def reserve(
         self,
         order_id: str,
