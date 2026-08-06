@@ -34,7 +34,6 @@ def test_expired_reservation_is_released():
     assert ledger.available("sku-1") == 2
 
 
-@pytest.mark.xfail(strict=True, reason="BUG-102: availability check and write are not atomic")
 def test_concurrent_reservations_never_oversell():
     barrier = Barrier(2)
     ledger = InventoryLedger({"sku-1": 1}, before_reservation_write=barrier.wait)
@@ -54,4 +53,3 @@ def test_concurrent_reservations_never_oversell():
 
     assert ledger.available("sku-1") == 0
     assert len(errors) == 1
-
