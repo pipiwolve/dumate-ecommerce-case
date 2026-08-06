@@ -1,0 +1,20 @@
+{
+  "task": "shopflow-weekly-delivery-update",
+  "mode": "demo_auto_push",
+  "snapshot_id": "shopflow-5bfd99fc6000",
+  "delivered_at": "2026-08-06T05:41:53.892237+00:00",
+  "deliveries": [
+    {
+      "audience": "tech_lead",
+      "file": "/Users/chenpengjian/Documents/DumateFDE/ecommerce-delivery-case/output/inbox/tech-lead/ShopFlow-v2.6-技术负责人版.pptx",
+      "sha256": "11a64d951caf97680ff2d6166bb9aea682bdd2064bc516955ab0a37ff016cc6a",
+      "status": "delivered"
+    },
+    {
+      "audience": "customer_project_manager",
+      "file": "/Users/chenpengjian/Documents/DumateFDE/ecommerce-delivery-case/output/inbox/customer-project-manager/ShopFlow-v2.6-客户项目经理版.pptx",
+      "sha256": "6257cc97b9979de6f1b821931278635b271802e1bc85b12e5285249133f05b8c",
+      "status": "delivered"
+    }
+  ]
+}

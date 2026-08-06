@@ -1,0 +1,47 @@
+[
+  {
+    "expert_id": "expert-wang-hai",
+    "name": "王海",
+    "title": "库存一致性架构师",
+    "team": "交易平台组",
+    "domains": ["inventory", "concurrency", "oversell", "idempotency"],
+    "modules": ["inventory-reservation", "order-service"],
+    "availability": "available",
+    "contact": "wang.hai@example.local",
+    "escalate_when": "出现负库存、原子性缺陷或 P0 库存阻塞"
+  },
+  {
+    "expert_id": "expert-guo-qi",
+    "name": "郭琪",
+    "title": "电商性能工程师",
+    "team": "平台效能组",
+    "domains": ["performance", "n+1", "batch", "cache"],
+    "modules": ["cart-service", "inventory-reservation", "runtime-config"],
+    "availability": "busy",
+    "contact": "guo.qi@example.local",
+    "escalate_when": "核心接口 P95 超过目标或出现调用放大"
+  },
+  {
+    "expert_id": "expert-li-na",
+    "name": "李娜",
+    "title": "应用安全专家",
+    "team": "安全工程组",
+    "domains": ["security", "rbac", "audit", "admin"],
+    "modules": ["admin-console"],
+    "availability": "available",
+    "contact": "li.na@example.local",
+    "escalate_when": "管理端写操作缺少权限或审计字段"
+  },
+  {
+    "expert_id": "expert-zhao-lei",
+    "name": "赵磊",
+    "title": "版本交付负责人",
+    "team": "客户交付组",
+    "domains": ["release", "quality-gate", "customer", "risk"],
+    "modules": ["repository-infrastructure", "quality-gates"],
+    "availability": "available",
+    "contact": "zhao.lei@example.local",
+    "escalate_when": "P0 阻塞超过 4 小时或里程碑预计延期"
+  }
+]
+
