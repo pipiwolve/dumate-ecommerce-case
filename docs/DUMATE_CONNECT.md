@@ -51,8 +51,10 @@ DuMate 导入：
 }
 ```
 
-推荐先调用 `delivery_build_snapshot`，再调用 `knowledge_search`、`expert_match` 和
-`delivery_generate_reports`。详细编排规则见仓库内 Skill。
+固定案例可先调用 `delivery_build_snapshot`，再调用 `knowledge_search`、
+`expert_match`。实时演示应以 GitHub 官方 MCP 为事实来源，并使用 DuMate 自身能力生成
+PPT；`delivery_generate_reports` 在公网只返回预生成案例制品。工具契约见
+`MCP_TOOL_REFERENCE.md`，完整步骤见 `DUMATE_DEMO_RUNBOOK.md`。
 
 ## GitHub 官方 MCP
 

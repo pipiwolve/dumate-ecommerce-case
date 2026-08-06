@@ -20,7 +20,7 @@ mcp = FastMCP("shopflow-delivery-knowledge")
 
 @mcp.tool()
 def delivery_build_snapshot() -> dict[str, Any]:
-    """Freeze the local Git and GitHub-compatible evidence into one cited snapshot."""
+    """Return the frozen demo snapshot; local mode can rebuild it from fixture Git refs."""
 
     if SERVERLESS:
         return load_frozen_snapshot()
@@ -29,7 +29,7 @@ def delivery_build_snapshot() -> dict[str, Any]:
 
 @mcp.tool()
 def delivery_get_issue(issue_key: str) -> dict[str, Any]:
-    """Read one normalized issue from the current delivery evidence."""
+    """Read one issue from the frozen demo fixture, not from live GitHub."""
 
     if SERVERLESS:
         snapshot = load_frozen_snapshot()
@@ -63,7 +63,7 @@ def expert_match(risk_tags: list[str], modules: list[str] | None = None) -> list
 
 @mcp.tool()
 def delivery_generate_reports() -> dict[str, Any]:
-    """Generate synchronized technical-lead and customer-project-manager PPTX files."""
+    """Get dual-audience demo PPT artifacts; only local mode regenerates the files."""
 
     if SERVERLESS:
         return pre_generated_reports()
@@ -72,7 +72,7 @@ def delivery_generate_reports() -> dict[str, Any]:
 
 @mcp.tool()
 def delivery_simulate_push() -> dict[str, Any]:
-    """Generate and copy both reports into separate local demo inboxes."""
+    """Preview demo report delivery; public mode does not send or write files."""
 
     if SERVERLESS:
         reports = pre_generated_reports()

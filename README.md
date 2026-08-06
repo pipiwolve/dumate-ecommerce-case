@@ -32,6 +32,10 @@ MCP_TRANSPORT=streamable-http uv run python -m shopflow.mcp_server
 DuMate 工具调用顺序见 `docs/CASE.md` 与 `skills/ecommerce-delivery-review/SKILL.md`。
 联网演练产生的真实对象与覆盖矩阵见 `docs/GITHUB_FLOW_EVIDENCE.md`。
 
+自建 MCP 的 7 个工具、数据来源和公网行为见 `docs/MCP_TOOL_REFERENCE.md`。使用 GitHub
+官方 MCP 获取实时研发事实、调用知识专家增强并由 DuMate 原生生成双角色 PPT 的完整
+演示步骤见 `docs/DUMATE_DEMO_RUNBOOK.md`。
+
 公网演示使用 Vercel ASGI 入口 `api/index.py`，只发布无状态 `/mcp` 网关供 DuMate
 Connector 完成协议验证和工具调用。公网连接配置与只读安全边界见
 `docs/DUMATE_CONNECT.md`。
