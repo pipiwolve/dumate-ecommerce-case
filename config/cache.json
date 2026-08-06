@@ -1,0 +1,5 @@
+{
+  "inventory_availability_ttl_seconds": 30,
+  "reservation_lookup_ttl_seconds": 120,
+  "negative_cache_enabled": true
+}
