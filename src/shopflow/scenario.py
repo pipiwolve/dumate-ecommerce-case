@@ -79,7 +79,7 @@ def build_snapshot(write: bool = True) -> dict[str, Any]:
 
     findings = []
     for item in seed["findings"]:
-        findings.append({**item, "diff": _diff("main", item["head_ref"])})
+        findings.append({**item, "diff": _diff("scenario/product-main", item["head_ref"])})
 
     weighted_progress = sum(
         issue["weight"] * issue["progress"] / 100 for issue in seed["issues"]
@@ -109,7 +109,7 @@ def build_snapshot(write: bool = True) -> dict[str, Any]:
         "findings": findings,
         "sources": [
             {"type": "github", "uri": "github://OWNER/ecommerce-delivery-case/milestone/v2.6"},
-            {"type": "git", "uri": f"git://shopflow/main@{_git('rev-parse', 'main')}"},
+            {"type": "git", "uri": f"git://shopflow/product-main@{_git('rev-parse', 'scenario/product-main')}"},
             {"type": "scenario", "uri": str(SEED_PATH.relative_to(ROOT))},
         ],
     }

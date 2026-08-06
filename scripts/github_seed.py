@@ -99,10 +99,11 @@ def publish(repo: str, apply: bool) -> None:
         if pr["state"] != "open":
             continue
         related = ", ".join(f"{key}: {issue_urls[key]}" for key in pr["issue_keys"])
+        github_base = "main" if pr["base_ref"].startswith("scenario/") else pr["base_ref"]
         command(
             [
                 "gh", "pr", "create", "--repo", repo,
-                "--base", pr["base_ref"], "--head", pr["head_ref"],
+                "--base", github_base, "--head", pr["head_ref"],
                 "--title", pr["title"],
                 "--body", f"DuMate 场景 PR。关联事项：{related}",
             ],
@@ -121,4 +122,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

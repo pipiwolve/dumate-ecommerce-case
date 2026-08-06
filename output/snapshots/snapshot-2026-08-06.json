@@ -186,7 +186,7 @@
         "FEAT-101"
       ],
       "state": "merged",
-      "head_ref": "main~1",
+      "head_ref": "scenario/feat-101",
       "base_ref": "EMPTY",
       "review_decision": "approved",
       "checks": [
@@ -197,7 +197,7 @@
       ],
       "diff": {
         "base_ref": "EMPTY",
-        "head_ref": "main~1",
+        "head_ref": "scenario/feat-101",
         "head_sha": "8225815db968ba244fc95bf6cc7fa5cb8cc266d6",
         "files": [
           ".gitignore",
@@ -220,7 +220,7 @@
         ],
         "insertions": 2061,
         "deletions": 0,
-        "source_url": "git://shopflow/EMPTY...main~1"
+        "source_url": "git://shopflow/EMPTY...scenario/feat-101"
       }
     },
     {
@@ -231,7 +231,7 @@
       ],
       "state": "open",
       "head_ref": "fix/bug-102-oversell",
-      "base_ref": "main",
+      "base_ref": "scenario/product-main",
       "review_decision": "changes_requested",
       "checks": [
         {
@@ -241,7 +241,7 @@
         }
       ],
       "diff": {
-        "base_ref": "main",
+        "base_ref": "scenario/product-main",
         "head_ref": "fix/bug-102-oversell",
         "head_sha": "80fcfb30352ed7c6f5c95bc653965363609364b3",
         "files": [
@@ -254,7 +254,7 @@
         ],
         "insertions": 34,
         "deletions": 7,
-        "source_url": "git://shopflow/main...fix/bug-102-oversell"
+        "source_url": "git://shopflow/scenario/product-main...fix/bug-102-oversell"
       }
     },
     {
@@ -264,8 +264,8 @@
         "BUG-103"
       ],
       "state": "merged",
-      "head_ref": "main",
-      "base_ref": "main~1",
+      "head_ref": "scenario/bug-103",
+      "base_ref": "scenario/feat-101",
       "review_decision": "approved",
       "checks": [
         {
@@ -274,8 +274,8 @@
         }
       ],
       "diff": {
-        "base_ref": "main~1",
-        "head_ref": "main",
+        "base_ref": "scenario/feat-101",
+        "head_ref": "scenario/bug-103",
         "head_sha": "8b67e3d750386b4c993fed848298fa54ff6e2bea",
         "files": [
           "src/shopflow/inventory.py",
@@ -288,7 +288,7 @@
         ],
         "insertions": 82,
         "deletions": 3,
-        "source_url": "git://shopflow/main~1...main"
+        "source_url": "git://shopflow/scenario/feat-101...scenario/bug-103"
       }
     },
     {
@@ -299,7 +299,7 @@
       ],
       "state": "open",
       "head_ref": "perf/perf-104-batch-stock",
-      "base_ref": "main",
+      "base_ref": "scenario/product-main",
       "review_decision": "review_required",
       "checks": [
         {
@@ -308,7 +308,7 @@
         }
       ],
       "diff": {
-        "base_ref": "main",
+        "base_ref": "scenario/product-main",
         "head_ref": "perf/perf-104-batch-stock",
         "head_sha": "577b8c36b8da745891d486fb5b7b18667b953544",
         "files": [
@@ -323,7 +323,7 @@
         ],
         "insertions": 27,
         "deletions": 2,
-        "source_url": "git://shopflow/main...perf/perf-104-batch-stock"
+        "source_url": "git://shopflow/scenario/product-main...perf/perf-104-batch-stock"
       }
     }
   ],
@@ -335,7 +335,7 @@
       "head_ref": "chore/cache-tuning",
       "reason": "分支与 Commit message 均没有 Issue 编号，且改变库存可见性缓存策略。",
       "diff": {
-        "base_ref": "main",
+        "base_ref": "scenario/product-main",
         "head_ref": "chore/cache-tuning",
         "head_sha": "41b919cda050be279661ce452a8adaa2300bd0ad",
         "files": [
@@ -346,7 +346,7 @@
         ],
         "insertions": 5,
         "deletions": 0,
-        "source_url": "git://shopflow/main...chore/cache-tuning"
+        "source_url": "git://shopflow/scenario/product-main...chore/cache-tuning"
       }
     }
   ],
@@ -357,12 +357,12 @@
     },
     {
       "type": "git",
-      "uri": "git://shopflow/main@8b67e3d750386b4c993fed848298fa54ff6e2bea"
+      "uri": "git://shopflow/product-main@8b67e3d750386b4c993fed848298fa54ff6e2bea"
     },
     {
       "type": "scenario",
       "uri": "scenario/github/seed.json"
     }
   ],
-  "snapshot_id": "shopflow-5bfd99fc6000"
+  "snapshot_id": "shopflow-41d613d1137b"
 }

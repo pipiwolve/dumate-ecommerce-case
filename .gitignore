@@ -1,6 +1,7 @@
 .venv/
 __pycache__/
 .pytest_cache/
+.codegraph/
 .presentation-runtime/
 build/
 dist/
