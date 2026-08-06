@@ -236,8 +236,14 @@ function addIssuePortfolio(presentation, context, audience, page, sourceList) {
 function addBugEvidence(presentation, context, page, sourceList) {
   const slide = presentation.slides.add();
   slide.background.fill = COLORS.white;
-  slideTitle(slide, "首次修复只锁写入，仍未关闭并发竞态", "BUG-102 / PR #202 / changes requested", context.snapshot_id, page);
   const pr = context.pull_requests.find((item) => item.number === 202);
+  slideTitle(
+    slide,
+    "首次修复只锁写入，仍未关闭并发竞态",
+    `BUG-102 / PR #${pr.github_number ?? pr.number} / changes requested`,
+    context.snapshot_id,
+    page,
+  );
   rect(slide, "bug-left", 42, 180, 706, 420, COLORS.panel);
   textBox(slide, "bug-code-title", "失败证据", 72, 210, 220, 42, { fontSize: 24, bold: true });
   textBox(
@@ -269,7 +275,7 @@ function addChangeImpact(presentation, context, page, sourceList) {
   slideTitle(slide, "三条开发线影响库存核心链路，一条改动脱离计划", "代码变化按 PR 与 Git ref 归因。", context.snapshot_id, page);
   const rows = [
     ...context.pull_requests.filter((pr) => [202, 203, 204].includes(pr.number)).map((pr) => ({
-      id: `PR #${pr.number}`,
+      id: pr.github_number ? `PR #${pr.github_number}` : `Commit ${pr.diff.head_sha.slice(0, 7)}`,
       title: pr.title,
       modules: pr.diff.modules.join(" / "),
       state: pr.checks.some((check) => check.conclusion === "failure") ? "检查失败" : pr.state === "merged" ? "已合并" : "审查中",
@@ -411,4 +417,3 @@ main().catch((error) => {
   console.error(error);
   process.exitCode = 1;
 });
-

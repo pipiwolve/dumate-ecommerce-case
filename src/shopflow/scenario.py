@@ -125,6 +125,7 @@ def build_snapshot(write: bool = True) -> dict[str, Any]:
         "issues": seed["issues"],
         "pull_requests": pull_requests,
         "findings": findings,
+        "live_evidence": seed.get("live_evidence", {}),
         "sources": [
             {"type": "github", "uri": "github://pipiwolve/dumate-ecommerce-case/milestone/v2.6"},
             {"type": "git", "uri": f"git://shopflow/product-main@{_git('rev-parse', 'scenario/product-main')}"},

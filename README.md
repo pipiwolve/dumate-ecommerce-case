@@ -30,6 +30,7 @@ MCP_TRANSPORT=streamable-http uv run python -m shopflow.mcp_server
 
 默认 HTTP 地址为 `http://127.0.0.1:8130/mcp`。完整场景说明、GitHub 发布步骤和
 DuMate 工具调用顺序见 `docs/CASE.md` 与 `skills/ecommerce-delivery-review/SKILL.md`。
+联网演练产生的真实对象与覆盖矩阵见 `docs/GITHUB_FLOW_EVIDENCE.md`。
 
 GitHub 上的 Milestone、Issue、PR、Review、Check Run、Release 与 Hotfix 是联网
 演示的事实来源；`scenario/github/seed.json` 仅保留可重复初始化与离线测试数据。

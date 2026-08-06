@@ -2,8 +2,11 @@
   "project": {
     "name": "ShopFlow v2.6 限时促销稳定性",
     "repository": "pipiwolve/dumate-ecommerce-case",
+    "repository_url": "https://github.com/pipiwolve/dumate-ecommerce-case",
     "snapshot_at": "2026-08-06T18:00:00+08:00",
     "milestone": {
+      "github_number": 1,
+      "url": "https://github.com/pipiwolve/dumate-ecommerce-case/milestone/1",
       "title": "v2.6 限时促销稳定性",
       "due_on": "2026-08-12",
       "customer_release_on": "2026-08-15",
@@ -13,6 +16,8 @@
   "issues": [
     {
       "number": 1,
+      "github_number": 3,
+      "url": "https://github.com/pipiwolve/dumate-ecommerce-case/issues/3",
       "key": "EPIC-1",
       "title": "限时促销库存稳定性版本",
       "type": "epic",
@@ -31,6 +36,8 @@
     },
     {
       "number": 101,
+      "github_number": 4,
+      "url": "https://github.com/pipiwolve/dumate-ecommerce-case/issues/4",
       "key": "FEAT-101",
       "title": "新增库存预占与超时释放模块",
       "type": "feature",
@@ -48,6 +55,8 @@
     },
     {
       "number": 102,
+      "github_number": 5,
+      "url": "https://github.com/pipiwolve/dumate-ecommerce-case/issues/5",
       "key": "BUG-102",
       "title": "高并发库存预占出现超卖",
       "type": "bug",
@@ -66,6 +75,8 @@
     },
     {
       "number": 103,
+      "github_number": 6,
+      "url": "https://github.com/pipiwolve/dumate-ecommerce-case/issues/6",
       "key": "BUG-103",
       "title": "取消订单后库存未完全释放",
       "type": "bug",
@@ -83,6 +94,8 @@
     },
     {
       "number": 104,
+      "github_number": 7,
+      "url": "https://github.com/pipiwolve/dumate-ecommerce-case/issues/7",
       "key": "PERF-104",
       "title": "购物车批量库存校验存在 N+1 查询",
       "type": "performance",
@@ -100,6 +113,8 @@
     },
     {
       "number": 105,
+      "github_number": 8,
+      "url": "https://github.com/pipiwolve/dumate-ecommerce-case/issues/8",
       "key": "SEC-105",
       "title": "后台人工调整库存缺少权限与审计校验",
       "type": "security",
@@ -117,6 +132,8 @@
   "pull_requests": [
     {
       "number": 201,
+      "github_number": null,
+      "commit_url": "https://github.com/pipiwolve/dumate-ecommerce-case/commit/8225815",
       "title": "feat: add inventory reservation module for v2.6",
       "issue_keys": ["FEAT-101"],
       "state": "merged",
@@ -127,16 +144,21 @@
     },
     {
       "number": 202,
+      "github_number": 9,
+      "url": "https://github.com/pipiwolve/dumate-ecommerce-case/pull/9",
       "title": "fix: serialize reservation writes for BUG-102",
       "issue_keys": ["BUG-102"],
       "state": "open",
-      "head_ref": "fix/bug-102-oversell",
+      "head_ref": "scenario/bug-102-first-attempt",
+      "publish_head_ref": "fix/bug-102-oversell",
       "base_ref": "scenario/product-main",
       "review_decision": "changes_requested",
       "checks": [{"name": "bug-102-regression", "conclusion": "failure", "summary": "expected available=0, actual=-1"}]
     },
     {
       "number": 203,
+      "github_number": null,
+      "commit_url": "https://github.com/pipiwolve/dumate-ecommerce-case/commit/8b67e3d",
       "title": "fix: release cancelled order inventory correctly",
       "issue_keys": ["BUG-103"],
       "state": "merged",
@@ -147,10 +169,13 @@
     },
     {
       "number": 204,
+      "github_number": 10,
+      "url": "https://github.com/pipiwolve/dumate-ecommerce-case/pull/10",
       "title": "perf: batch cart inventory availability checks",
       "issue_keys": ["PERF-104"],
       "state": "open",
-      "head_ref": "perf/perf-104-batch-stock",
+      "head_ref": "scenario/perf-104",
+      "publish_head_ref": "perf/perf-104-batch-stock",
       "base_ref": "scenario/product-main",
       "review_decision": "review_required",
       "checks": [{"name": "unit-tests", "conclusion": "success"}]
@@ -161,8 +186,30 @@
       "key": "CHORE-106",
       "title": "缓存配置变更未关联 Issue",
       "severity": "medium",
-      "head_ref": "chore/cache-tuning",
+      "head_ref": "scenario/chore-106",
+      "github_issue_number": 15,
+      "github_issue_url": "https://github.com/pipiwolve/dumate-ecommerce-case/issues/15",
+      "github_pr_number": 14,
+      "github_pr_url": "https://github.com/pipiwolve/dumate-ecommerce-case/pull/14",
       "reason": "分支与 Commit message 均没有 Issue 编号，且改变库存可见性缓存策略。"
     }
-  ]
+  ],
+  "live_evidence": {
+    "main_sha": "fda9abfa80a17c2b5d081f216f9613fc15ae370d",
+    "bug_102_final_pr": "https://github.com/pipiwolve/dumate-ecommerce-case/pull/13",
+    "bug_102_review_thread": "https://github.com/pipiwolve/dumate-ecommerce-case/pull/13#discussion_r3726405955",
+    "hotfix_107_issue": "https://github.com/pipiwolve/dumate-ecommerce-case/issues/16",
+    "hotfix_107_pr": "https://github.com/pipiwolve/dumate-ecommerce-case/pull/17",
+    "release_rc1": "https://github.com/pipiwolve/dumate-ecommerce-case/releases/tag/v2.6.0-rc.1",
+    "release_rc2": "https://github.com/pipiwolve/dumate-ecommerce-case/releases/tag/v2.6.0-rc.2",
+    "evidence_tags": [
+      "scenario/feat-101",
+      "scenario/bug-103",
+      "scenario/bug-102-first-attempt",
+      "scenario/bug-102-fixed",
+      "scenario/perf-104",
+      "scenario/chore-106",
+      "scenario/hotfix-107"
+    ]
+  }
 }
